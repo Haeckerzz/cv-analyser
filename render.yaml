@@ -2,7 +2,7 @@ services:
   # 1. THE BACKEND (Web Service)
   - type: web
     name: cv-analyser-backend
-    env: node
+    runtime: node
     buildCommand: npm install && npm run build --workspace=backend
     startCommand: npm run start --workspace=backend
     envVars:
@@ -12,9 +12,9 @@ services:
   # 2. THE FRONTEND (Static Site)
   - type: web
     name: cv-analyser-frontend
-    env: static
+    runtime: static
     buildCommand: npm install && npm run build --workspace=frontend
-    staticPublishDir: frontend/dist
+    staticPublishPath: ./frontend/dist
     routes:
       - type: rewrite
         source: /api/*
