@@ -16,10 +16,8 @@ app.use("/api/parse-file", parseFileRouter);
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`Backend running on http://localhost:${PORT}`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
+});
 
 export default app;

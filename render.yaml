@@ -1,0 +1,24 @@
+services:
+  # 1. THE BACKEND (Web Service)
+  - type: web
+    name: cv-analyser-backend
+    env: node
+    buildCommand: npm install && npm run build --workspace=backend
+    startCommand: npm run start --workspace=backend
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+
+  # 2. THE FRONTEND (Static Site)
+  - type: static
+    name: cv-analyser-frontend
+    env: static
+    buildCommand: npm install && npm run build --workspace=frontend
+    publishDir: frontend/dist
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://cv-analyser-backend.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
