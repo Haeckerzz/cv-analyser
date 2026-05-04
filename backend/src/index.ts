@@ -7,14 +7,19 @@ import { parseFileRouter } from "./routes/parseFile";
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
-app.use(cors({ origin: "http://localhost:5173" }));
-app.use(express.json({ limit: "2mb" }));
+// Enable CORS for all origins in production, or use an environment variable
+app.use(cors());
+app.use(express.json({ limit: "5mb" }));
 
 app.use("/api/analyze", analyzeRouter);
 app.use("/api/parse-file", parseFileRouter);
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Backend running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;

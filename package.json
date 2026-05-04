@@ -1,0 +1,12 @@
+{
+  "name": "cv-analyser",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=frontend && npm run build --workspace=backend"
+  }
+}
