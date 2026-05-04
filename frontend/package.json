@@ -15,7 +15,8 @@
     "react-dom": "^19.2.5",
     "vis-data": "^8.0.3",
     "vis-network": "^10.0.2",
-    "zod": "^4.4.2"
+    "zod": "^4.4.2",
+    "@cv-analyser/shared": "*"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
