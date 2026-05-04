@@ -5,15 +5,21 @@ import { z } from "zod";
 export const SkillSchema = z.object({
   name: z.string(),
   category: z.string(),
-  proficiency: z.enum(["beginner", "intermediate", "advanced", "expert"]),
-  years_experience: z.number().nullable(),
+  proficiency: z.preprocess(
+    (v) =>
+      String(v || "beginner")
+        .toLowerCase()
+        .trim(),
+    z.enum(["beginner", "intermediate", "advanced", "expert"]),
+  ),
+  years_experience: z.coerce.number().nullable().catch(null),
   context: z.string(),
 });
 export type Skill = z.infer<typeof SkillSchema>;
 
 export const CVSkillsDataSchema = z.object({
   skills: z.array(SkillSchema),
-  experience_years: z.number(),
+  experience_years: z.coerce.number().catch(0),
   education: z.string(),
 });
 export type CVSkillsData = z.infer<typeof CVSkillsDataSchema>;
@@ -23,7 +29,7 @@ export type CVSkillsData = z.infer<typeof CVSkillsDataSchema>;
 export const JDSkillsDataSchema = z.object({
   required_skills: z.array(z.string()),
   nice_to_have_skills: z.array(z.string()),
-  experience_required_years: z.number(),
+  experience_required_years: z.coerce.number().catch(0),
   education_required: z.string(),
 });
 export type JDSkillsData = z.infer<typeof JDSkillsDataSchema>;
@@ -34,7 +40,10 @@ export const GraphNodeSchema = z.object({
   id: z.string(),
   label: z.string(),
   category: z.string(),
-  proficiency: z.enum(["beginner", "intermediate", "advanced", "expert"]).nullable(),
+  proficiency: z.preprocess(
+    (v) => (v ? String(v).toLowerCase().trim() : null),
+    z.enum(["beginner", "intermediate", "advanced", "expert"]).nullable(),
+  ),
   status: z.enum(["matched", "gap", "candidate_only"]),
 });
 export type GraphNode = z.infer<typeof GraphNodeSchema>;
@@ -108,7 +117,7 @@ export const AnalyzeRequestSchema = z.object({
   jd_text: z.string().min(20, "Job description must be at least 20 characters"),
   weights: WeightsSchema.refine(
     (w) => Math.abs(w.skills + w.experience + w.education - 100) < 0.5,
-    { message: "Weights must sum to 100" }
+    { message: "Weights must sum to 100" },
   ),
 });
 export type AnalyzeRequest = z.infer<typeof AnalyzeRequestSchema>;
