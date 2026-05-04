@@ -10,11 +10,11 @@ services:
         sync: false
 
   # 2. THE FRONTEND (Static Site)
-  - type: static
+  - type: web
     name: cv-analyser-frontend
     env: static
     buildCommand: npm install && npm run build --workspace=frontend
-    publishDir: frontend/dist
+    staticPublishDir: frontend/dist
     routes:
       - type: rewrite
         source: /api/*
